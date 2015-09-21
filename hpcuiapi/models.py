@@ -16,7 +16,6 @@ def user_directory_path(instance, filename):
 
 class File(models.Model):
     creator = models.ForeignKey(User)
-    name = models.CharField(max_length=70)
     description = models.CharField(max_length=140, null=True)
     file = models.FileField(upload_to=user_directory_path)
     created_at = models.DateTimeField(auto_now_add=True)

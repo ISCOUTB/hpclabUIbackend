@@ -10,6 +10,8 @@ class FilesView(APIView):
     @staticmethod
     def get(request):
         files = File.objects.filter(creator=request.user.id)
+        for fileobject in files:
+            fileobject.size = fileobject.file.size
         serializer = FileSerializer(files, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -32,6 +34,7 @@ class FileDetail(APIView):
         try:
             fileobject = File.objects.get(pk=fk)
             self.check_object_permissions(self.request, fileobject)
+            fileobject.size = fileobject.file.size
             return fileobject
         except File.DoesNotExist:
             raise Http404
@@ -41,6 +44,7 @@ class FileDetail(APIView):
         serializer = FileSerializer(fileobject)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    # Problema cuando en la edicion se envia otro archivo, queda el anterior y el nuevo
     def put(self, request, fk):
         fileobject = self.get_object(fk)
         serializer = FileSerializer(fileobject, data=request.data)
