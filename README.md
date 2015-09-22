@@ -3,4 +3,4 @@
 
 ## Paquetes por instalar:
 
- pip install django-cors-headers
+ pip install -r requirements.txt
