@@ -4,8 +4,8 @@ from ..imports import *
 
 
 class ProjectsView(APIView):
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (JSONWebTokenAuthentication,)
 
     @staticmethod
     def get(request):
@@ -25,8 +25,8 @@ class ProjectsView(APIView):
 
 
 class ProjectDetail(APIView):
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, IsOwner,)
+    authentication_classes = (JSONWebTokenAuthentication,)
 
     def get_object(self, pk):
         try:

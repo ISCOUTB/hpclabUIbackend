@@ -4,7 +4,7 @@ from ..imports import *
 
 
 class FilesView(APIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated, IsOwner,)
 
     @staticmethod
@@ -27,7 +27,7 @@ class FilesView(APIView):
 
 
 class FileDetail(APIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated, IsOwner,)
 
     def get_object(self, fk):
@@ -44,14 +44,13 @@ class FileDetail(APIView):
         serializer = FileSerializer(fileobject)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # Problema cuando en la edicion se envia otro archivo, queda el anterior y el nuevo
-    def put(self, request, fk):
-        fileobject = self.get_object(fk)
-        serializer = FileSerializer(fileobject, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def put(self, request, fk):
+    #     fileobject = self.get_object(fk)
+    #     serializer = FileSerializer(fileobject, data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, fk):
         fileobject = self.get_object(fk)
