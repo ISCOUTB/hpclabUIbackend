@@ -1,7 +1,7 @@
 from ..serializers import FileSerializer
 from ..models import File
 from ..imports import *
-from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
+from rest_framework.parsers import FileUploadParser
 
 
 class FilesView(APIView):
@@ -12,8 +12,6 @@ class FilesView(APIView):
     @staticmethod
     def get(request):
         files = File.objects.filter(creator=request.user.id)
-        for fileobject in files:
-            fileobject.size = fileobject.file.size
         serializer = FileSerializer(files, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

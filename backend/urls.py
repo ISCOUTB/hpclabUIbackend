@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from hpcuiapi.controllers import FileController, ProjectController, ToolController
+from hpcuiapi.controllers import FileController, ProjectController, UserController
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = patterns('',
@@ -11,6 +11,7 @@ urlpatterns = patterns('',
                        url(r'^projects/(?P<pk>[0-9]+)/$', ProjectController.ProjectDetail.as_view()),
                        url(r'^files/$', FileController.FilesView.as_view()),
                        url(r'^files/(?P<fk>[0-9]+)/$', FileController.FileDetail.as_view()),
+                       url(r'^user/', UserController.UserView.as_view()),
                        )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
