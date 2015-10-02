@@ -19,9 +19,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class FileSerializer(serializers.ModelSerializer):
-    description = serializers.CharField(required=False)
     file = serializers.FileField(required=True)
-    size = serializers.IntegerField(required=False)
 
     class Meta:
         model = File

@@ -1,11 +1,13 @@
 from ..serializers import FileSerializer
 from ..models import File
 from ..imports import *
+from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
 
 
 class FilesView(APIView):
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated, IsOwner,)
+    parser_classes = (FileUploadParser, )
 
     @staticmethod
     def get(request):
