@@ -16,7 +16,7 @@ class UserView(APIView):
 
     @staticmethod
     def put(request):
-        user = request.user.get_profile()
+        user = User.objects.get(pk=request.user.id)
         serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()

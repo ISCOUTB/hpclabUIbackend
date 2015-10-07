@@ -20,7 +20,7 @@ class File(models.Model):
     filename = models.CharField(max_length=140, null=True)
     file = models.FileField(upload_to=user_directory_path)
     size = models.IntegerField(null=True)
-    type = models.CharField(max_length=20, null=True)
+    type = models.CharField(max_length=140, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

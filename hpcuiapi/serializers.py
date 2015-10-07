@@ -12,7 +12,6 @@ class UserSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
     description = serializers.CharField(required=False, allow_null=True)
-    creator = UserSerializer(required=False)
 
     class Meta:
         model = Project
