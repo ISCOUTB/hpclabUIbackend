@@ -2,6 +2,7 @@ __author__ = 'juan'
 from ..serializers import UserSerializer
 from ..models import User
 from ..imports import *
+from django.shortcuts import get_object_or_404
 
 
 class UserView(APIView):
@@ -10,13 +11,13 @@ class UserView(APIView):
 
     @staticmethod
     def get(request):
-        user = User.objects.get(pk=request.user.id)
+        user = get_object_or_404(User, pk=request.user.id)
         user = UserSerializer(user)
         return Response(user.data, status=status.HTTP_200_OK)
 
     @staticmethod
     def put(request):
-        user = User.objects.get(pk=request.user.id)
+        user = get_object_or_404(User, pk=request.user.id)
         serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
