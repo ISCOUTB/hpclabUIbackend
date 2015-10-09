@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Project, File
+from models import Project, File, Tool
 from django.contrib.auth.models import User
 
 
@@ -24,3 +24,22 @@ class FileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
+
+
+class JSONSerializerField(serializers.Field):
+
+    def to_internal_value(self, data):
+        return data
+
+    def to_representation(self, value):
+        return value
+
+
+class ToolSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=True)
+    description = serializers.CharField(required=True)
+    params = JSONSerializerField()
+
+
+    class Meta:
+        model = Tool
