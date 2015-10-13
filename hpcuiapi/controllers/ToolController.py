@@ -1,10 +1,10 @@
 from ..serializers import ToolSerializer
 from ..models import Tool
 from ..imports import *
+from rest_framework.decorators import permission_classes
 
 
 class ToolsView(APIView):
-    permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
 
     @staticmethod
@@ -14,6 +14,8 @@ class ToolsView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @staticmethod
+    @permission_classes(IsAuthenticated,)
+    @permission_classes(IsAdminUser,)
     def post(request):
         serializer = ToolSerializer(data=request.data)
         if not serializer.is_valid():
@@ -24,7 +26,6 @@ class ToolsView(APIView):
 
 
 class ToolDetail(APIView):
-    permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
 
     def get_object(self, pk):
@@ -35,11 +36,14 @@ class ToolDetail(APIView):
         except Tool.DoesNotExist:
             raise Http404
 
+    @permission_classes(IsAuthenticated,)
     def get(self, request, pk):
         tool = self.get_object(pk)
         serializer = ToolSerializer(tool)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @permission_classes(IsAuthenticated,)
+    @permission_classes(IsAdminUser,)
     def put(self, request, pk):
         tool = self.get_object(pk)
         serializer = ToolSerializer(tool, data=request.data)
@@ -48,6 +52,8 @@ class ToolDetail(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @permission_classes(IsAuthenticated,)
+    @permission_classes(IsAdminUser,)
     def delete(self, request, pk):
         tool = self.get_object(pk)
         tool.delete()

@@ -40,6 +40,5 @@ class ToolSerializer(serializers.ModelSerializer):
     description = serializers.CharField(required=True)
     params = JSONSerializerField()
 
-
     class Meta:
         model = Tool
