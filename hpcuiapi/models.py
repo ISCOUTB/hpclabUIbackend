@@ -1,11 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from jsonfield import JSONField
-import uuid
 
 
 class Project(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(User)
     name = models.CharField(max_length=70)
     description = models.CharField(max_length=140, null=True)
@@ -18,7 +16,6 @@ def user_directory_path(instance, filename):
 
 
 class File(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creator = models.ForeignKey(User)
     filename = models.CharField(max_length=140, null=True)
     file = models.FileField(upload_to=user_directory_path)
@@ -29,7 +26,6 @@ class File(models.Model):
 
 
 class Tool(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=700, null=True)
     params = JSONField()
