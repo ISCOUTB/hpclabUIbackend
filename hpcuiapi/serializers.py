@@ -21,6 +21,7 @@ class FileSerializer(serializers.ModelSerializer):
     filename = serializers.CharField(required=False)
     file = serializers.FileField(required=True)
     size = serializers.IntegerField(required=False)
+    md5sum = serializers.CharField(required=False)
 
     class Meta:
         model = File

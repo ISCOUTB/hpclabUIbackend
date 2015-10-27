@@ -1,13 +1,19 @@
 from ..serializers import FileSerializer
 from ..models import File
 from ..imports import *
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import FileUploadParser, JSONParser, FormParser, MultiPartParser
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 class FilesView(APIView):
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated, IsOwner,)
-    parser_classes = (FileUploadParser, )
+    # parser_classes = (FileUploadParser, )
+    # parser_classes = (JSONParser, )
+    # parser_classes = (FormParser, )
+    parser_classes = (MultiPartParser, FormParser)
 
     @staticmethod
     def get(request):
@@ -15,8 +21,7 @@ class FilesView(APIView):
         serializer = FileSerializer(files, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @staticmethod
-    def post(request):
+    def put(self, request, format=None):
         request.data['creator'] = request.user.id
         serializer = FileSerializer(data=request.data)
         if not serializer.is_valid():
@@ -24,6 +29,9 @@ class FilesView(APIView):
         else:
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # datafile = self.request.data.get('file')
+        # file = request.data
+        # return Response(file.encode('utf-8'))
 
 
 class FileDetail(APIView):
