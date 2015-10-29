@@ -1,7 +1,7 @@
 from ..serializers import FileSerializer
 from ..models import File
 from ..imports import *
-from rest_framework.parsers import FileUploadParser, JSONParser, FormParser, MultiPartParser
+from rest_framework.parsers import FormParser, MultiPartParser
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -10,9 +10,6 @@ sys.setdefaultencoding('utf8')
 class FilesView(APIView):
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsAuthenticated, IsOwner,)
-    # parser_classes = (FileUploadParser, )
-    # parser_classes = (JSONParser, )
-    # parser_classes = (FormParser, )
     parser_classes = (MultiPartParser, FormParser)
 
     @staticmethod
@@ -29,9 +26,6 @@ class FilesView(APIView):
         else:
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # datafile = self.request.data.get('file')
-        # file = request.data
-        # return Response(file.encode('utf-8'))
 
 
 class FileDetail(APIView):
@@ -42,7 +36,6 @@ class FileDetail(APIView):
         try:
             fileobject = File.objects.get(pk=fk)
             self.check_object_permissions(self.request, fileobject)
-            fileobject.size = fileobject.file.size
             return fileobject
         except File.DoesNotExist:
             raise Http404

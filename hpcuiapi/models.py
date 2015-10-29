@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from jsonfield import JSONField
 from django.core.files.storage import FileSystemStorage
+from django.dispatch import receiver
 import os
 import hashlib
 
@@ -12,9 +13,7 @@ class MediaFileSystemStorage(FileSystemStorage):
 
     def _save(self, name, content):
         if self.exists(name):
-            # if the file exists, do not call the superclasses _save method
             return name
-        # if the file is new, DO call it
         return super(MediaFileSystemStorage, self)._save(name, content)
 
 
@@ -49,6 +48,18 @@ class File(models.Model):
                 md5.update(chunk)
             self.md5sum = md5.hexdigest()
         super(File, self).save(*args, **kwargs)
+
+
+@receiver(models.signals.post_delete, sender=File)
+def md5based_delete_file(sender, instance, **kwargs):
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            md5 = hashlib.md5()
+            for chunk in instance.file.chunks():
+                md5.update(chunk)
+            md5code = md5.hexdigest()
+            if File.objects.filter(md5sum=md5code).count() == 0:
+                os.remove(instance.file.path)
 
 
 class Tool(models.Model):

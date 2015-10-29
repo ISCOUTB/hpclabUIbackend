@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'hpcuiapi',
     'rest_framework',
     'rest_framework.authtoken',
-    'django_cleanup',
     'corsheaders',
 )
 
