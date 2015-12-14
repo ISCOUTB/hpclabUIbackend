@@ -5,6 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.dispatch import receiver
 import os
 import hashlib
+import collections
 
 
 class MediaFileSystemStorage(FileSystemStorage):
@@ -54,12 +55,13 @@ class File(models.Model):
 def md5based_delete_file(sender, instance, **kwargs):
     if instance.file:
         if os.path.isfile(instance.file.path):
-            md5 = hashlib.md5()
-            for chunk in instance.file.chunks():
-                md5.update(chunk)
-            md5code = md5.hexdigest()
-            if File.objects.filter(md5sum=md5code).count() == 0:
+            if File.objects.filter(md5sum=instance.file.md5sum).count() == 0:
                 os.remove(instance.file.path)
+
+
+class InputFile(models.Model):
+    project = models.ForeignKey(Project)
+    file = models.ForeignKey(File)
 
 
 class Tool(models.Model):
@@ -68,4 +70,17 @@ class Tool(models.Model):
     params = JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class ToolFile(models.Model):
+    tool = models.ForeignKey(Tool)
+    file = models.FileField(upload_to='tools', storage=MediaFileSystemStorage())
+    exe = models.BooleanField()
+
+
+class WorkflowStep(models.Model):
+    project = models.ForeignKey(Project)
+    tool = models.ForeignKey(Tool)
+    input = models.ForeignKey('self', null=True, blank=True)
+    params = JSONField(load_kwargs={'object_pairs_hook': collections.OrderedDict})
 

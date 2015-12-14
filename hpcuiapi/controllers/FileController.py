@@ -45,14 +45,6 @@ class FileDetail(APIView):
         serializer = FileSerializer(fileobject)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # def put(self, request, fk):
-    #     fileobject = self.get_object(fk)
-    #     serializer = FileSerializer(fileobject, data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     def delete(self, request, fk):
         fileobject = self.get_object(fk)
         fileobject.delete()
