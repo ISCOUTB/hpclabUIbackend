@@ -38,8 +38,8 @@ class JSONSerializerField(serializers.Field):
 
 class ToolSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
-    description = serializers.CharField(required=True)
-    params = JSONSerializerField()
+    description = serializers.CharField(required=False)
+    params = JSONSerializerField(required=False)
 
     class Meta:
         model = Tool

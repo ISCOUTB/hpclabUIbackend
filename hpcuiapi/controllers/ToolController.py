@@ -28,24 +28,24 @@ class ToolsView(APIView):
 class ToolDetail(APIView):
     authentication_classes = (JSONWebTokenAuthentication,)
 
-    def get_object(self, pk):
+    def get_object(self, fk):
         try:
-            tool = Tool.objects.get(pk=pk)
+            tool = Tool.objects.get(pk=fk)
             self.check_object_permissions(self.request, tool)
             return tool
         except Tool.DoesNotExist:
             raise Http404
 
     @permission_classes(IsAuthenticated,)
-    def get(self, request, pk):
-        tool = self.get_object(pk)
+    def get(self, request, fk):
+        tool = self.get_object(fk)
         serializer = ToolSerializer(tool)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @permission_classes(IsAuthenticated,)
     @permission_classes(IsAdminUser,)
-    def put(self, request, pk):
-        tool = self.get_object(pk)
+    def put(self, request, fk):
+        tool = self.get_object(fk)
         serializer = ToolSerializer(tool, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -54,7 +54,7 @@ class ToolDetail(APIView):
 
     @permission_classes(IsAuthenticated,)
     @permission_classes(IsAdminUser,)
-    def delete(self, request, pk):
-        tool = self.get_object(pk)
+    def delete(self, request, fk):
+        tool = self.get_object(fk)
         tool.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

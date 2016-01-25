@@ -55,7 +55,11 @@ class File(models.Model):
 def md5based_delete_file(sender, instance, **kwargs):
     if instance.file:
         if os.path.isfile(instance.file.path):
-            if File.objects.filter(md5sum=instance.file.md5sum).count() == 0:
+            md5 = hashlib.md5()
+            for chunk in instance.file.chunks():
+                md5.update(chunk)
+            md5code = md5.hexdigest()
+            if File.objects.filter(md5sum=md5code).count() == 0:
                 os.remove(instance.file.path)
 
 
@@ -65,9 +69,9 @@ class InputFile(models.Model):
 
 
 class Tool(models.Model):
-    name = models.CharField(max_length=256)
+    name = models.TextField()
     description = models.CharField(max_length=768, null=True)
-    params = JSONField()
+    params = JSONField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
