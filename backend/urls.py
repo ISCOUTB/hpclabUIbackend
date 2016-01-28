@@ -12,7 +12,7 @@ urlpatterns = patterns('',
                        url(r'^files/$', FileController.FilesView.as_view()),
                        url(r'^files/(?P<fk>[0-9]+)/$', FileController.FileDetail.as_view()),
                        url(r'^user/', UserController.UserView.as_view()),
-                       url(r'^tools/', ToolController.ToolsView.as_view()),
+                       url(r'^tools/$', ToolController.ToolsView.as_view()),
                        url(r'^tools/(?P<fk>[0-9]+)/$', ToolController.ToolDetail.as_view()),
                        )
 
