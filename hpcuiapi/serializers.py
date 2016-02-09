@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Project, File, Tool
+from models import Project, File, Tool, ToolFile
 from django.contrib.auth.models import User
 
 
@@ -43,3 +43,13 @@ class ToolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tool
+
+
+class ToolFileSerializer(serializers.ModelSerializer):
+    file = serializers.FileField(required=True)
+    filename = serializers.CharField(required=False)
+    size = serializers.IntegerField(required=False)
+    exe = serializers.BooleanField(required=True)
+
+    class Meta:
+        model = ToolFile

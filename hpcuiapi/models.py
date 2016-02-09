@@ -70,16 +70,30 @@ class InputFile(models.Model):
 
 class Tool(models.Model):
     name = models.TextField()
-    description = models.CharField(max_length=768, null=True)
-    params = JSONField(null=True)
+    description = models.TextField(null=True)
+    params = JSONField(null=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    public = models.BooleanField(default=False)
+
+
+def tool_file_name(instance, filename):
+    return os.path.join('tools', instance.tool.id, filename)
 
 
 class ToolFile(models.Model):
     tool = models.ForeignKey(Tool)
-    file = models.FileField(upload_to='tools', storage=MediaFileSystemStorage())
-    exe = models.BooleanField()
+    file = models.FileField(upload_to=tool_file_name)
+    exe = models.BooleanField(default=False)
+    size = models.IntegerField(null=True)
+    filename = models.CharField(max_length=256, null=True)
+
+
+@receiver(models.signals.post_delete, sender=ToolFile)
+def md5based_delete_file(sender, instance, **kwargs):
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)
 
 
 class WorkflowStep(models.Model):

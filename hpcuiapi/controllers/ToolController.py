@@ -8,13 +8,13 @@ class ToolsView(APIView):
     authentication_classes = (JSONWebTokenAuthentication,)
 
     @staticmethod
+    @permission_classes(IsAuthenticated,)
     def get(request):
         tools = Tool.objects.all()
         serializer = ToolSerializer(tools, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @staticmethod
-    @permission_classes(IsAuthenticated,)
     @permission_classes(IsAdminUser,)
     def post(request):
         serializer = ToolSerializer(data=request.data)
@@ -42,7 +42,6 @@ class ToolDetail(APIView):
         serializer = ToolSerializer(tool)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @permission_classes(IsAuthenticated,)
     @permission_classes(IsAdminUser,)
     def put(self, request, fk):
         tool = self.get_object(fk)
@@ -52,7 +51,6 @@ class ToolDetail(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @permission_classes(IsAuthenticated,)
     @permission_classes(IsAdminUser,)
     def delete(self, request, fk):
         tool = self.get_object(fk)
