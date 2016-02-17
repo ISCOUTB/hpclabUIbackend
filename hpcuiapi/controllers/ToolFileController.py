@@ -2,10 +2,15 @@ from ..serializers import ToolFileSerializer
 from ..models import ToolFile
 from ..imports import *
 from rest_framework.decorators import permission_classes
+from rest_framework.parsers import FormParser, MultiPartParser
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 class ToolFilesView(APIView):
     authentication_classes = (JSONWebTokenAuthentication,)
+    parser_classes = (MultiPartParser, FormParser)
 
     @staticmethod
     def get(request, tk):
@@ -15,7 +20,7 @@ class ToolFilesView(APIView):
 
     @staticmethod
     @permission_classes(IsAdminUser,)
-    def post(request):
+    def put(request, tk):
         serializer = ToolFileSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

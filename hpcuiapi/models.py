@@ -9,7 +9,7 @@ import collections
 
 
 class MediaFileSystemStorage(FileSystemStorage):
-    def get_available_name(self, name):
+    def get_available_name(self, name, max_length=None):
         return name
 
     def _save(self, name, content):
@@ -21,7 +21,7 @@ class MediaFileSystemStorage(FileSystemStorage):
 class Project(models.Model):
     creator = models.ForeignKey(User)
     name = models.CharField(max_length=128)
-    description = models.CharField(max_length=768, null=True)
+    description = models.CharField(max_length=768, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -70,15 +70,15 @@ class InputFile(models.Model):
 
 class Tool(models.Model):
     name = models.TextField()
-    description = models.TextField(null=True)
-    params = JSONField(null=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    description = models.TextField(blank=True, null=True)
+    params = JSONField(blank=True, null=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     public = models.BooleanField(default=False)
 
 
 def tool_file_name(instance, filename):
-    return os.path.join('tools', instance.tool.id, filename)
+    return os.path.join('tools', str(instance.tool.id), filename)
 
 
 class ToolFile(models.Model):
