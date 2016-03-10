@@ -1,4 +1,4 @@
-# hpclab-ui-backend
+# HPCLab Rest API
 
 ## Required for local test
 
