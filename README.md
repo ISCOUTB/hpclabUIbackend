@@ -11,7 +11,7 @@
  sudo apt install -y python-dev libldap2-dev libsasl2-dev libssl-dev libmysqlclient-dev python-pip python-virtualenv
 ```
 
-## Managing the virtualenv
+## Executing the project
 
 First, create the virtualenv
 
