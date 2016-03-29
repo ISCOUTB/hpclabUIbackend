@@ -71,7 +71,7 @@ class InputFile(models.Model):
 class Tool(models.Model):
     name = models.TextField()
     description = models.TextField(blank=True, null=True)
-    params = JSONField(blank=True, null=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    params = JSONField(default = [], load_kwargs={'object_pairs_hook': collections.OrderedDict})
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     public = models.BooleanField(default=False)
@@ -100,5 +100,5 @@ class WorkflowStep(models.Model):
     project = models.ForeignKey(Project)
     tool = models.ForeignKey(Tool)
     input = models.ForeignKey('self', null=True, blank=True)
-    params = JSONField(load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    params = JSONField(default = [], load_kwargs={'object_pairs_hook': collections.OrderedDict})
 
