@@ -12,13 +12,12 @@ class FilesView(APIView):
     permission_classes = (IsAuthenticated, IsOwner,)
     parser_classes = (MultiPartParser, FormParser)
 
-    @staticmethod
-    def get(request):
-        files = File.objects.filter(creator=request.user.id)
+    def get(self, request, pk):
+        files = File.objects.filter(creator=request.user.id, project=pk)
         serializer = FileSerializer(files, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, format=None):
+    def put(self, request, pk, format=None):
         request.data['creator'] = request.user.id
         serializer = FileSerializer(data=request.data)
         if not serializer.is_valid():

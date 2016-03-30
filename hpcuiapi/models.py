@@ -34,6 +34,7 @@ def media_file_name(instance, filename):
 
 class File(models.Model):
     creator = models.ForeignKey(User)
+    project = models.ForeignKey(Project)
     filename = models.CharField(max_length=256, null=True)
     file = models.FileField(upload_to=media_file_name, storage=MediaFileSystemStorage())
     md5sum = models.CharField(max_length=36)
@@ -63,9 +64,9 @@ def md5based_delete_file(sender, instance, **kwargs):
                 os.remove(instance.file.path)
 
 
-class InputFile(models.Model):
-    project = models.ForeignKey(Project)
-    file = models.ForeignKey(File)
+# class InputFile(models.Model):
+#     project = models.ForeignKey(Project)
+#     file = models.ForeignKey(File)
 
 
 class Tool(models.Model):
