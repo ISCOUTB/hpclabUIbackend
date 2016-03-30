@@ -6,6 +6,7 @@ from django.dispatch import receiver
 import os
 import hashlib
 import collections
+import uuid
 
 
 class MediaFileSystemStorage(FileSystemStorage):
@@ -100,6 +101,8 @@ def md5based_delete_file(sender, instance, **kwargs):
 class WorkflowStep(models.Model):
     project = models.ForeignKey(Project)
     tool = models.ForeignKey(Tool)
-    input = models.ForeignKey('self', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     params = JSONField(default = [], load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 

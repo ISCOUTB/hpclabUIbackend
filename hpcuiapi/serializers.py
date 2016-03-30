@@ -45,6 +45,13 @@ class ToolSerializer(serializers.ModelSerializer):
         model = Tool
 
 
+class PublicToolSerializer(serializers.ModelSerializer):
+    params = JSONSerializerField(required=False)
+    class Meta:
+        model = Tool
+        fields = ('id', 'name', 'description', 'params')
+
+
 class ToolFileSerializer(serializers.ModelSerializer):
     file = serializers.FileField(required=True)
     filename = serializers.CharField(required=False)

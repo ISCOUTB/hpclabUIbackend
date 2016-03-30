@@ -1,4 +1,4 @@
-from ..serializers import ToolSerializer
+from ..serializers import PublicToolSerializer
 from ..models import Tool
 from ..imports import *
 
@@ -10,7 +10,7 @@ class WorkflowToolsView(APIView):
     @staticmethod
     def get(request):
         tools = Tool.objects.filter(public=True)
-        serializer = ToolSerializer(tools, many=True)
+        serializer = PublicToolSerializer(tools, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # def put(self, request, format=None):
