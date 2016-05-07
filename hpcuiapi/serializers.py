@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Project, File, Tool, ToolFile
+from models import Project, File, Tool, ToolFile, Task
 from django.contrib.auth.models import User
 
 
@@ -47,9 +47,17 @@ class ToolSerializer(serializers.ModelSerializer):
 
 class PublicToolSerializer(serializers.ModelSerializer):
     params = JSONSerializerField(required=False)
+
     class Meta:
         model = Tool
         fields = ('id', 'name', 'description', 'params')
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    params = JSONSerializerField(required=True)
+
+    class Meta:
+        model = Task
 
 
 class ToolFileSerializer(serializers.ModelSerializer):

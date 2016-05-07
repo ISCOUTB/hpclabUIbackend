@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^projects/$', ProjectController.ProjectsView.as_view()),
     url(r'^project/(?P<pk>[0-9]+)/$', ProjectController.ProjectDetail.as_view()),
     url(r'^project/(?P<pk>[0-9]+)/files/$', FileController.FilesView.as_view()),
+    url(r'^project/(?P<pk>[0-9]+)/tasks/$', WorkflowController.TasksView.as_view()),
+    url(r'^project/(?P<pk>[0-9]+)/task/(?P<uuid>[0-9a-z-]+)', WorkflowController.TaskView.as_view()),
     url(r'^file/(?P<fk>[0-9]+)/$', FileController.FileDetail.as_view()),
     url(r'^user/', UserController.UserView.as_view()),
     url(r'^ptools/$', WorkflowController.WorkflowToolsView.as_view()),

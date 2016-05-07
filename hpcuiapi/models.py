@@ -98,9 +98,10 @@ def md5based_delete_file(sender, instance, **kwargs):
             os.remove(instance.file.path)
 
 
-class WorkflowStep(models.Model):
+class Task(models.Model):
     project = models.ForeignKey(Project)
     tool = models.ForeignKey(Tool)
+    name = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     params = JSONField(default = [], load_kwargs={'object_pairs_hook': collections.OrderedDict})
